@@ -1,0 +1,50 @@
+
+--This SQL query is to find the top 10 countries for Rockbuster in terms of customer numbers. 
+
+--Customer_id->Address_id->city_id->country_id	, From the material given, the below codes have been used
+
+SELECT D.country,
+       COUNT(staff_id)
+FROM staff A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+INNER JOIN country D ON C.country_ID = D.country_ID
+GROUP BY country
+SELECT D.country, 
+COUNT (A.customer_id) as customer_count 
+FROM customer A 
+INNER JOIN address B ON A.address_id = B.address_id 
+INNER JOIN city C ON B.city_id = C.city_id 
+INNER JOIN country D ON C.country_id = D.country_id 
+GROUP BY D. country 
+ORDER BY COUNT(A.customer_id) DESC 
+LIMIT 10;
+
+--Query to identify the top 10 cities that fall within the top 10 countries we identified in step 1--
+
+SELECT D.country,C.city,
+COUNT(A.customer_id) AS customer_count   
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = C.city_id
+INNER JOIN country D ON C.country_id = D.country_id
+WHERE D.country IN(
+SELECT D.country 
+FROM customer A
+INNER JOIN address B ON A.address_id = B.address_id
+INNER JOIN city C ON B.city_id = 	C.city_id
+INNER JOIN country D ON C.country_id = D.country_id
+GROUP BY D.country
+ORDER BY COUNT(A.customer_id) DESC
+LIMIT 10)
+GROUP BY D.country,C.city
+ORDER BY customer_count DESC
+LIMIT 10;
+
+
+
+
+
+
+
+
